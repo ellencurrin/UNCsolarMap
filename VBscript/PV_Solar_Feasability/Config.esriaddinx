@@ -1,0 +1,20 @@
+﻿<ESRI.Configuration xmlns="http://schemas.esri.com/Desktop/AddIns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>PV_Solar_Feasability</Name>
+  <AddInID>{3292f4d3-86bd-48fc-bc23-57fcd44afb7e}</AddInID>
+  <Description>This tool allows users to generate a feasibability threshold based the following parameters.  This is then used to select points in an area solar radiation point grid and building map.  These areas represent feasible targets for the installation of PV solar.</Description>
+  <Version>1.0</Version>
+  <Image>Images\PV_Solar_Feasability.png</Image>
+  <Author>tchandle</Author>
+  <Company>The University of North Carolina at Chapel Hill</Company>
+  <Date>11/18/2014</Date>
+  <Targets>
+    <Target name="Desktop" version="10.2" />
+  </Targets>
+  <AddIn language="CLR4.0" library="PV_Solar_Feasability.dll" namespace="PV_Solar_Feasability">
+    <ArcMap>
+      <Commands>
+        <Button id="The_University_of_PV_Solar_Feasability_MainBt" class="MainBt" message="This tool allows users to generate a feasibability threshold for rooftop solar installation based the cost, feasability and payback period.  This is then used to select points on rooftops in the designated area.  These areas represent feasible targets for the installation of PV solar." caption="Rooftop Solar Calculation" tip="Rooftop Solar Calculation" category="Add-In Controls" image="Images\MainBt.png" />
+      </Commands>
+    </ArcMap>
+  </AddIn>
+</ESRI.Configuration>

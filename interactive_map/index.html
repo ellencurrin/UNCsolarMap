@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    
+    <meta charset=utf-8 />
+        <title>UNC Solar Map</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    
+    <!--JQUERY-->
+    <script src='https://code.jquery.com/jquery-1.11.0.min.js'></script>
+    <!--BOOTSTRAP-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <!--FONT AWESOME-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <!--MAPBOX-->
+    <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
+    <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+    <!-- LEAFLET PLUGINS -->
+    <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css' rel='stylesheet' /> 
+    <!-- TURF.JS -->
+    <script src="js/turf.min.js" charset="utf-8"></script>
+    <!-- MAKIMARKERS JS-->
+    <script src="js/Leaflet.MakiMarkers.js"></script>
+    <!--BOOTBOX DIALOG-->
+    <script type="text/javascript" src="js/bootbox.min.js"></script>
+    <!-- MY JS -->
+    <script src='js/my.js'></script>
+    
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; left:20%; width:100%; z-index: 0; }
+        #customize {padding: 15px; position: absolute; z-index: 10; width: 20%;}
+        .toggleBt {position: absolute; right: 35px; top: 20px; z-index: 2}
+        #toggleBt {padding: 8px;}
+        .info p {line-height: .8}
+        .expand-div {position: absolute; z-index: 1; width: 3%; height: 100%; background-color: #fff;}
+        .exit {float: right; display: block; margin: 5px;}
+        .bt {margin: 5px 10px 10px 2px; border: none; background: none;}
+        .chev {font-size: 28px; color: #FAFAFA; opacity: .5; text-shadow: 1px 1px #999, -1px 1px #999, 1px -1px #999, -1px -1px #999;}
+        .chev:hover {opacity: 1}
+        #side {position: absolute; z-index: 10; width: 20%; display: block;}
+        
+        .pt1 {color: #BA0320; opacity: .8;}
+        .pt2 {color: #EA3C08; opacity: .8;}
+        .pt3 {color: #FE7E13; opacity: .8;}
+        .pt4 {color: #FFB626; opacity: .8;}
+        
+    </style>
+    
+</head>
+
+<body>
+
+<div class="expand-div">
+    <button class="bt"onclick=expand() data-toggle="tooltip" data-placement="right" title="expand menu"> <i class="chev fa fa-chevron-right"></i> </button>
+    <button class="bt"onclick=expand() data-toggle="tooltip" data-placement="right" title="get help"> <i class="chev fa fa-question"></i> </button>
+    <button class="bt"onclick=expand() data-toggle="tooltip" data-placement="right" title="change parameters"> <i style="font-size:24px; margin-left: -1px;" class="chev fa fa-wrench"></i> </button>
+    <button class="bt"onclick=expand() data-toggle="tooltip" data-placement="right" title="learn more"> <i style="font-size:24px; margin-left: -1px;" class="chev fa fa-sun-o"></i> </button>
+    <a class="bt" href="https://github.com/ellencurrin/UNCsolarMap" target="_blank" data-toggle="tooltip" data-placement="right" title="check us out on GitHub!"> <i style="font-size:24px; margin-left: 5px;" class="chev fa fa-github"></i> </a>
+</div>
+
+<div id="side">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      <div style="height: 0px">
+        <button class="exit bt" onclick=hide() data-toggle="tooltip" data-placement="right" title="collapse menu"> <i style="font-size: 28px" class="chev fa fa-chevron-left"></i> </button>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              How to Use this Map
+            </a>
+          </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+    The color of each building represents its total solar energy production. Hover over a building to find its name, and click on the building to reveal more detailed statistics such as the number of panels that could fit on the roof and the average yearly cost savings. </br></br>
+    The points you see indicate places feasible solar panels sites. Use our default feasibility parameters or customize your own using the <b>Customize Parameters</b> tab. Click <b>Apply</b> to see the map reflect your selection! <a onclick=openDialog()>Find out more about suitability parameters here.</a> </br></br>
+    
+    You can toggle the point layer on and off using the <b>Toggle Points</b> button in the top right corner. </br>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingTwo">
+          <h4 class="panel-title">
+            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              Customize Parameters
+            </a>
+          </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class= "panel-body">
+                <a onclick=openDialog()>What is a feasibility parameter?</a>
+                <form class="form-horizontal">
+                    <div class="form-group" style="padding: 20px;">
+                      <label for="inputEmail3" class="control-label" data-toggle="tooltip" data-placement="right" title="Average cost of panel + installation (varies by brand and region)">System Cost: </label>
+                        <input type="text" class="form-control" id="sysCost" value=521>
+                      <label for="inputPassword3" class="control-label" data-toggle="tooltip" data-placement="right" title="Deadline for the investment to pay off">Payback Period: </label>
+                        <input type="text" class="form-control" id="years" value=15>
+                      <label for="inputPassword3" class=" control-label" data-toggle="tooltip" data-placement="right" title="Cost of 1 kWh of electricity (varies by region)">Local Cost per kWh: </label>
+                        <input type="text" class="form-control" id="costKWH" value=.1022>
+                      <label for="inputPassword3" class=" control-label" data-toggle="tooltip" data-placement="right" title="Efficiency of whole PV system (varies by brand)">System Efficiency (%): </label>
+                        <input type="text" class="form-control" id="sysEff" value=90>
+                      <label for="inputPassword3" class=" control-label" data-toggle="tooltip" data-placement="right" title="Efficiency of individual panel (varies by brand)">Panel Efficiency (%):</label>
+                        <input type="text" class="form-control" id="panelEff" value=18>
+                    </div>
+              </form>
+              <button style="margin-left: 33%; text-align: center;" onclick=setVariables()>Apply</button>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingThree">
+          <h4 class="panel-title">
+            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              Solar Background
+            </a>
+          </h4>
+        </div>
+        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+                Solar panels are a cleaner source of energy than coal powered plants. But while solar panels can save money over time, the initial cost of installation hinders their adoption at places like UNC where budgets are short-term and money is limited. This map is a product of an initiative led by UNCs Renewable Energy Special Projects Committee (RESPC) to investigate solar siting feasibility on campus, and to determine the most suitable location for UNCs next solar installation.
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingFour">
+          <h4 class="panel-title">
+            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+              About: Data and Credits
+            </a>
+          </h4>
+        </div>
+        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+          <div class="panel-body">
+            This map was built using <a href: Òhttp://mapbox.comÓ>Mapbox.js</a> and data from USGS. </br></br>
+            To see our code or learn how to make your own, check out this project on <a href: Òhttps://github.com/ellencurrin/UNCsolarMapÓ>GitHub</a></br></br>
+            <p style="font-size: 11px;">Project by: Ellen Currin (UNC) and Tait Chandler (UNC)</p>
+          </div>
+        </div>    
+      </div>
+    </div>
+</div>
+
+
+<div class="toggleBt">
+    <button id ="toggleBt" onclick=togglePts()>Toggle Points</button>
+</div>     
+   
+<div id="map"></div>
+
+
+</body>
+</html>
