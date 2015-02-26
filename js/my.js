@@ -234,10 +234,10 @@ function onClick(polygon) {
     var perTotal = (((polygon.feature.properties.usablearea/polygon.feature.properties.bldg_area))*100).toFixed(2)
     var savings = (totalSolar * 365 * costKWH).toFixed(2)
     var content = '<div class="info"><h2>' + polygon.feature.properties.buildingna + '</h2>'
-        content += '<p> Total Roof Production: ' + totalSolar + ' kwh/day </p>'
-        content +='<p> Usable area: ' + polygon.feature.properties.usablearea + ' sq ft (' + perTotal + '% of total) </p>'
-        content +='<p> Max Number of panels: ' + polygon.feature.properties.numpanels + '</p>'
-        content +='<p> Yearly savings: $' + savings + '</p>'
+        content += '<p> Total Roof Production: <b>' + totalSolar + ' kwh/day </b></p>'
+        content +='<p> Usable area: <b>' + polygon.feature.properties.usablearea + ' sq ft</b> (' + perTotal + '% of total) </p>'
+        content +='<p> Max Number of panels: <b>' + polygon.feature.properties.numpanels + '</b></p>'
+        content +='<p> Yearly savings: <b>$' + savings + '</b></p>'
         content += '</div'>
     polygon.bindPopup(content);
     polygon.openPopup()
