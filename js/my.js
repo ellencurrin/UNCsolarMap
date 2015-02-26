@@ -262,12 +262,20 @@ function onClick(polygon) {
 //// COLLAPSE/EXPAND CUSTOMIZE DIV
 function hide() {
     document.getElementById("side").style.display = 'none';
+    document.getElementById("expand-div").style.display = 'block';
     document.getElementById("map").style.left = '3%';
+    document.getElementById("title").style.left = '7%';
+    document.getElementById("title2").style.left = '7%';
+
 }
 
 function expand() {
     document.getElementById("side").style.display = 'block';
+    document.getElementById("expand-div").style.display = 'none';
     document.getElementById("map").style.left = '20%';
+    document.getElementById("title").style.left = '25%';
+    document.getElementById("title2").style.left = '25%';
+
 }
 
 function openDialog() {

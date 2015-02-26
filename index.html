@@ -34,12 +34,35 @@
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; left:20%; width:100%; z-index: 0; }
+        #title {
+            position: absolute;
+            top:10px;
+            left:25%;
+            z-index: 1;
+            color: #fff;
+            background-color: #666;
+            opacity:.6;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        #title h1 {margin: 0;font-size: 48px;}
+        #title2 {
+            position: absolute;
+            top:10px;
+            left:25%;
+            z-index: 3;
+            color: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            font-weight: lighter;
+        }
+        #title2 h1 {margin: 0; font-size: 48px;}
         #customize {padding: 15px; position: absolute; z-index: 10; width: 20%;}
         .toggleBt {position: absolute; right: 35px; top: 20px; z-index: 2}
         #toggleBt {padding: 8px;}
         .info p {line-height: .6; font-size: 13px;}
         .info h2 {font-weight: bold;}
-        .expand-div {position: absolute; z-index: 1; width: 3%; height: 100%; background-color: #fff;}
+        #expand-div {position: absolute; z-index: 2; width: 3%; height: 100%; background-color: #fff; display: none;}
         .exit {float: right; display: block; margin: 5px;}
         .bt {margin: 5px 10px 10px 2px; border: none; background: none;}
         .chev {font-size: 28px; color: #FAFAFA; opacity: .5; text-shadow: 1px 1px #999, -1px 1px #999, 1px -1px #999, -1px -1px #999;}
@@ -57,7 +80,14 @@
 
 <body>
 
-<div class="expand-div">
+<div id="title">
+    <h1>UNC Solar Map</h1>
+</div>
+<div id="title2">
+    <h1>UNC Solar Map</h1>
+</div>
+
+<div id="expand-div">
     <button class="bt"onclick=expand() data-toggle="tooltip" data-placement="right" title="expand menu"> <i class="chev fa fa-chevron-right"></i> </button>
     <button class="bt"onclick=expand() data-toggle="tooltip" data-placement="right" title="get help"> <i class="chev fa fa-question"></i> </button>
     <button class="bt"onclick=expand() data-toggle="tooltip" data-placement="right" title="change parameters"> <i style="font-size:24px; margin-left: -1px;" class="chev fa fa-wrench"></i> </button>
