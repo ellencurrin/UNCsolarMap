@@ -54,7 +54,9 @@ function setVariables(){
         map.removeLayer(bldg);
         addBldg()
         if (ptStatus == true) {
-            addPts()
+            map.removeLayer(pts);
+	    console.log("removing pt layer")
+	    //addPts()
         }
     } else {
         console.log("no remove")
@@ -187,8 +189,7 @@ function addPts() {
                             html: '<b style="font-size:33px;";>&#8226</b>',
                             iconAnchor: [2,2],
                             iconSize: [150, 40]
-                        }))
-                        marker.addTo(map)
+                        })).addTo(map)
                     } else if (marker.feature.properties.kwh_m2_day >= (minValue + interval*2)) {
                         marker.setIcon(L.divIcon({
                             className: 'pt2',
@@ -210,7 +211,7 @@ function addPts() {
                             iconAnchor: [2,2],
                             iconSize: [150, 40]
                         })).addTo(map)
-                    } else {console.log("no more points")}
+                    } //else {console.log("no more points")}
                 })
     })
     //.addTo(map)
